@@ -82,8 +82,8 @@ function SettinngsBillExpress() {
     setSettings,
     getSettings,
     recordOption,
-    actions,
-    actionsfor,
+    options,
+    optionType,
     totals,
     hasReachedWarningLevel,
     hasReachedCriticalLevel
