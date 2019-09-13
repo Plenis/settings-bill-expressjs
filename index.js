@@ -20,21 +20,22 @@ app.get("/", function(req, res) {
 });
 
 app.post("/settings", function(req, res) {
-//   settingsBill.setSettings({
-//     callCost: req.body.callCost,
-//     smsCost: req.body.smsCost,
-//     warningLevel: req.body.warningLevel,
-//     criticalLevel: req.body.criticalLevel
-//   });
+  settingsBill.getSettings({
+    callCost: req.body.callCost,
+    smsCost: req.body.smsCost,
+    warningLevel: req.body.warningLevel,
+    criticalLevel: req.body.criticalLevel
+  });
 
   console.log(req.body);
 
   res.redirect("/");
 });
 
-// app.post("/action", function(req, res) {
-
-// });
+app.post("/action", function(req, res) {
+console.log(req.body.optionType);
+    res.redirect("/");
+});
 
 // app.get("/actions", function(req, res) {
 
