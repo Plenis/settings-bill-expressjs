@@ -1,89 +1,93 @@
 function SettinngsBillExpress() {
-  var callTotal = 0;
-  var smsTotal = 0;
-  var totalCost = 0;
-
-  var callCost = 0;
-  var smsCost = 0;
-
-  var warningLevel = warningLevelSetting.value;
-  var criticalLevel = criticalLevelSetting.value;
+  let callCost;
+  let smsCost;
+  let warningLevel;
+  let criticalLevel;
 
   var optionList = [];
 
-  function setSettings() {
-    callTotal = Number(callCost.value);
-    smsTotal = Number(smsCost.value);
-    warningLevel = Number(warningLevelSetting.value);
-    criticalLevel = Number(criticalLevelSetting.value);
-
-    
-    if (totalCost >= criticalLevel){
-        totalCostElemThree.classList.add("danger");
-            .classList.remove("warning");
-        settingBillAddBtn.disabled = false;
-        
-    }
-    if (totalCost >= warningLevel){
-        totalCostElemThree.classList.add("warning");
-        totalCostElemThree.classList.remove("danger");
-        settingBillAddBtn.disabled = false;
-    }
-   
-    if (totalCost < warningLevel){
-        totalCostElemThree.classList.remove("warning");
-        totalCostElemThree.classList.remove("danger");
-        settingBillAddBtn.disabled = false;
-    }
+  function setSettings(settings) {
+    callCost = Number(settings.callCost);
+    smsCost = Number(settings.smsCost);
+    warningLevel = settings.warningLevel;
+    criticalLevel = settings.criticalLevel;
   }
 
-  function getSettings(){
-      return{
-          callTotal,
-          smsTotal,
-          warningLevel,
-          criticalLevel,
-      }
-
+  function getSettings() {
+    return {
+      callTotal,
+      smsTotal,
+      warningLevel,
+      criticalLevel
+    };
   }
 
-  function recordOption(option){
-   let cost = 0;
-   if(option == "sms"){
+  function recordOption(option) {
+    let cost = 0;
+    if (option == "sms") {
       cost = smsCost;
-   }
-   else if (option == "call"){
-       cost = callCost;
-   }
+    } else if (option == "call") {
+      cost = callCost;
+    }
 
-   optionList.push({
-       type: action,
-       cost,
-       timestrap: new Date()
-   });
-
+    optionList.push({
+      type: action,
+      cost,
+      timestrap: new Date()
+    });
   }
 
-  function options(){
-      return optionList;
+  function options() {
+    return optionList;
   }
 
-  function optionType(type){
-      return optionList.filter((option) => action.type === type);
+  function optionType(type) {
+    return optionList.filter(option => action.type === type);
   }
 
-  //function to get the total?? what should happen??
+  function getTotal(type) {
+    return optiionList.reduce((total, action) => {
+      let val = option.type === type ? action.cost : 0;
+      return total + val;
+    }, 0);
+  }
 
-  function getTotal(type){
+  function grandTotal() {
+    return getTotal("call") + getTotal("sms");
+  }
 
+  function totals() {
+    let callTotal = getTotal("call");
+    let smsTotal = getTotal("call");
+    return {
+      callTotal,
+      smsTotal,
+      grandTotal: grandTotal()
+    };
+  }
+
+  function hasReachedWarningLevel() {
+    const total = grandTotal();
+    const reachedWarningLevel = total >= warningLevel && total < criticalLevel;
+
+    return reachedWarningLevel;
+  }
+
+  function hasReachedCriticalLevel() {
+    const total = grandTotal();
+    return total >= criticalLevel;
   }
 
   return {
     setSettings,
     getSettings,
     recordOption,
-    options,
-    optionType,
-    getTotal,
+    actions,
+    actionsfor,
+    totals,
+    hasReachedWarningLevel,
+    hasReachedCriticalLevel
   };
 }
+
+module.exports = SettinngsBillExpress;
