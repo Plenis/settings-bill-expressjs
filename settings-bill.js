@@ -1,4 +1,5 @@
 function SettinngsBillExpress() {
+  
   let callCost;
   let smsCost;
   let warningLevel;
@@ -6,17 +7,17 @@ function SettinngsBillExpress() {
 
   var optionList = [];
 
-  function setSettings(settings) {
+  function setBillSettings(settings) {
     callCost = Number(settings.callCost);
     smsCost = Number(settings.smsCost);
     warningLevel = settings.warningLevel;
     criticalLevel = settings.criticalLevel;
   }
 
-  function getSettings() {
+  function getBillSettings() {
     return {
-      callTotal,
-      smsTotal,
+      callCost,
+      smsCost,
       warningLevel,
       criticalLevel
     };
@@ -31,8 +32,8 @@ function SettinngsBillExpress() {
     }
 
     optionList.push({
-      type: action,
-      cost,
+      type: option,
+      cost: cost,
       timestrap: new Date()
     });
   }
@@ -42,12 +43,12 @@ function SettinngsBillExpress() {
   }
 
   function optionType(type) {
-    return optionList.filter(option => action.type === type);
+    return optionList.filter(option => option.type === type);
   }
 
   function getTotal(type) {
-    return optiionList.reduce((total, action) => {
-      let val = option.type === type ? action.cost : 0;
+    return optionList.reduce((total, option) => {
+      let val = option.type === type ? option.cost : 0;
       return total + val;
     }, 0);
   }
@@ -58,7 +59,9 @@ function SettinngsBillExpress() {
 
   function totals() {
     let callTotal = getTotal("call");
-    let smsTotal = getTotal("call");
+    let smsTotal = getTotal("sms");
+    console.log(optionList);
+
     return {
       callTotal,
       smsTotal,
@@ -79,8 +82,8 @@ function SettinngsBillExpress() {
   }
 
   return {
-    setSettings,
-    getSettings,
+    setBillSettings,
+    getBillSettings,
     recordOption,
     options,
     optionType,

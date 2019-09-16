@@ -4,9 +4,17 @@ const bodyParser = require("body-parser");
 const SettinngsBillExpress = require("./settings-bill");
 
 const app = express();
-const settingsBill = SettinngsBillExpress;
+const settingsBillExpress = SettinngsBillExpress();
 
-app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.engine(
+  "handlebars",
+  exphbs({
+    defaultLayout: "main",
+    extname: ".handlebars",
+    layoutsDir: __dirname + "/views/layouts",
+    partialsDir: __dirname + "/views/partials"
+  })
+);
 app.set("view engine", "handlebars");
 
 app.use(express.static("public"));
@@ -16,11 +24,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.get("/", function(req, res) {
-  res.render("index");
+  console.log(req.body);
+  const totals = settingsBillExpress.totals();
+  const settings = settingsBillExpress.getBillSettings();
+  res.render("index", { settings, totals });
 });
 
 app.post("/settings", function(req, res) {
-  settingsBill.getSettings({
+  settingsBillExpress.setBillSettings({
     callCost: req.body.callCost,
     smsCost: req.body.smsCost,
     warningLevel: req.body.warningLevel,
@@ -33,13 +44,13 @@ app.post("/settings", function(req, res) {
 });
 
 app.post("/action", function(req, res) {
-console.log(req.body.optionType);
-    res.redirect("/");
+  settingsBillExpress.recordOption(req.body.optionType);
+  res.redirect("/");
 });
 
-// app.get("/actions", function(req, res) {
-
-// });
+app.get("/actions", function(req, res) {
+  res.render("actions", { options: settingsBillExpress.options() });
+});
 
 // app.post("/actions/:type", function(req, res) {
 
