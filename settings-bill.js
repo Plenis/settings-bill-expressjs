@@ -30,11 +30,11 @@ function SettinngsBillExpress() {
     } else if (option == "call") {
       cost = callCost;
     }
-
+var moment = require('moment')
     optionList.push({
       type: option,
       cost: cost,
-      timestamp: new Date()
+      timestamp: moment().format()
     });
   }
 
