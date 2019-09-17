@@ -34,7 +34,7 @@ function SettinngsBillExpress() {
     optionList.push({
       type: option,
       cost: cost,
-      timestrap: new Date()
+      timestamp: new Date()
     });
   }
 
@@ -69,16 +69,12 @@ function SettinngsBillExpress() {
     };
   }
 
-  function hasReachedWarningLevel() {
-    const total = grandTotal();
-    const reachedWarningLevel = total >= warningLevel && total < criticalLevel;
-
-    return reachedWarningLevel;
-  }
-
-  function hasReachedCriticalLevel() {
-    const total = grandTotal();
-    return total >= criticalLevel;
+  function colorChange(){
+    if( grandTotal() >= warningLevel && grandTotal() < criticalLevel){
+      return "warning"
+    }else if( grandTotal() >= criticalLevel){
+      return "danger"
+    }
   }
 
   return {
@@ -88,8 +84,7 @@ function SettinngsBillExpress() {
     options,
     optionType,
     totals,
-    hasReachedWarningLevel,
-    hasReachedCriticalLevel
+    colorChange,
   };
 }
 
