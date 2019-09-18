@@ -27,4 +27,13 @@ describe('Settings Bill with ExpressJS' , function(){
         instance.setBillSettings({criticalLevel: 10})
         assert.equal(10, instance.getBillSettings().criticalLevel);
     })
+
+    it('should be able to add calls when call has a set cost and even when changed', function(){
+        let instance = settingsBill();
+        instance.setBillSettings({callCost: 3})
+        instance.setBillSettings({callCost: 3})
+        instance.setBillSettings({callCost: 2})
+        instance.setBillSettings({callCost: 4})
+        assert.equal(12, instance.totals().callTotal);
+    })
 });

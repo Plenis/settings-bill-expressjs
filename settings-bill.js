@@ -25,16 +25,19 @@ function SettinngsBillExpress() {
 
   function recordOption(option) {
     let cost = 0;
-    if (option == "sms") {
-      cost = smsCost;
-    } else if (option == "call") {
-      cost = callCost;
+    if(!stopBill()){
+      if (option == "sms") {
+        cost = smsCost;
+      } else if (option == "call") {
+        cost = callCost;
+      }
     }
+    
 var moment = require('moment')
     optionList.push({
       type: option,
       cost: cost,
-      timestamp: moment().format()
+      timestamp: moment().format('MMMM Do YYYY, h:mm:ss a')
     });
   }
 
@@ -58,14 +61,14 @@ var moment = require('moment')
   }
 
   function totals() {
-    let callTotal = getTotal("call");
-    let smsTotal = getTotal("sms");
+    let callTotal = getTotal("call").toFixed(2);
+    let smsTotal = getTotal("sms").toFixed(2);
     console.log(optionList);
 
     return {
       callTotal,
       smsTotal,
-      grandTotal: grandTotal()
+      grandTotal: grandTotal().toFixed(2)
     };
   }
 
@@ -77,12 +80,17 @@ var moment = require('moment')
     }
   }
 
+  function stopBill(){
+    return grandTotal() >= criticalLevel
+  }
+
   return {
     setBillSettings,
     getBillSettings,
     recordOption,
     options,
     optionType,
+    getTotal,
     totals,
     colorChange,
   };
