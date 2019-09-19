@@ -28,12 +28,93 @@ describe('Settings Bill with ExpressJS' , function(){
         assert.equal(10, instance.getBillSettings().criticalLevel);
     })
 
-    it('should be able to add calls when call has a set cost and even when changed', function(){
+    it('should be able to add calls and sms when it has a been set', function(){
         let instance = settingsBill();
-        instance.setBillSettings({callCost: 3})
-        instance.setBillSettings({callCost: 3})
-        instance.setBillSettings({callCost: 2})
-        instance.setBillSettings({callCost: 4})
-        assert.equal(12, instance.totals().callTotal);
+        instance.setBillSettings({
+            callCost: 3,
+            smsCost: 2,
+        })
+        
+        instance.recordOption("call")
+        instance.recordOption("sms")
+        instance.recordOption("call")
+
+        assert.equal(6, instance.totals().callTotal);
+        assert.equal(2, instance.totals().smsTotal);
+        assert.equal(8, instance.totals().grandTotal);
     })
+
+    it('should be able to add calls and sms when it has a been set, even with decimals', function(){
+        let instance = settingsBill();
+        instance.setBillSettings({
+            callCost: 3.50,
+            smsCost: 0.99,
+        })
+        
+        instance.recordOption("call")
+        instance.recordOption("sms")
+        instance.recordOption("sms")
+        instance.recordOption("sms")
+        instance.recordOption("call")
+        instance.recordOption("call")
+
+        assert.equal(10.50, instance.totals().callTotal);
+        assert.equal(2.97, instance.totals().smsTotal);
+        assert.equal(13.47, instance.totals().grandTotal);
+    })
+
+    it('should be able to add calls and sms when it has a been set and changed after addition', function(){
+        let instance = settingsBill();
+        instance.setBillSettings({
+            callCost: 3,
+            smsCost: 2,
+            warningLevel: 10,
+            criticalLevel: 15,
+        })
+        
+        instance.recordOption("call")
+        instance.recordOption("sms")
+        instance.recordOption("call")
+
+        instance.setBillSettings({
+            callCost: 3.50,
+            smsCost: 2.99,
+            warningLevel: 15,
+            criticalLevel: 27,
+        })
+
+        instance.recordOption("call")
+        instance.recordOption("sms")
+        instance.recordOption("sms")
+        instance.recordOption("sms")
+        instance.recordOption("call")
+        instance.recordOption("call")
+
+        assert.equal(16.50, instance.totals().callTotal);
+        assert.equal(10.97, instance.totals().smsTotal);
+        assert.equal(27.47, instance.totals().grandTotal);
+    })
+
+    
+    it('should not exceed critical level set', function(){
+        let instance = settingsBill();
+        instance.setBillSettings({
+            callCost: 3,
+            smsCost: 2,
+            warningLevel: 10,
+            criticalLevel: 15,
+        })
+
+        instance.recordOption('call')
+        instance.recordOption('call')
+        instance.recordOption('call')
+        instance.recordOption('call')
+        instance.recordOption('sms')
+        instance.recordOption('sms')
+        instance.recordOption('call')
+
+        assert.equal(16, instance.totals().grandTotal)
+        assert.equal("danger", instance.colorChange())
+    })
+
 });
