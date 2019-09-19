@@ -32,12 +32,11 @@ function SettinngsBillExpress() {
         cost = callCost;
       }
     }
-    
-var moment = require('moment')
+
     optionList.push({
       type: option,
       cost: cost,
-      timestamp: moment().format('MMMM Do YYYY, h:mm:ss a')
+      timestamp: new Date()
     });
   }
 
