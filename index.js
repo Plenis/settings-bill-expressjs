@@ -56,10 +56,12 @@ app.post("/action", function(req, res) {
 
 app.get("/actions", function(req, res) {
   console.log(settingsBillExpress.options());
+
   var option = settingsBillExpress.options();
   for (const iterator of option) {
     iterator.ago = moment(iterator.timestamp).fromNow();
   }
+  
   res.render("actions", { actions: option });
 });
 

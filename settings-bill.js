@@ -31,7 +31,7 @@ function SettinngsBillExpress() {
       } else if (option == "call") {
         cost = callCost;
       }
-    }
+    
 
     optionList.push({
       type: option,
@@ -39,7 +39,7 @@ function SettinngsBillExpress() {
       timestamp: new Date()
     });
   }
-
+  }
   function options() {
     return optionList;
   }
