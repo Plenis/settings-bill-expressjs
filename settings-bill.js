@@ -62,7 +62,7 @@ function SettinngsBillExpress() {
   function totals() {
     let callTotal = getTotal("call").toFixed(2);
     let smsTotal = getTotal("sms").toFixed(2);
-    console.log(optionList);
+    // console.log(optionList);
 
     return {
       callTotal,
@@ -96,3 +96,4 @@ function SettinngsBillExpress() {
 }
 
 module.exports = SettinngsBillExpress;
+ 
