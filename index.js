@@ -20,9 +20,9 @@ app.set("view engine", "handlebars");
 
 app.use(express.static("public"));
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: false }));
 
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.get("/", function(req, res) {
   console.log(req.body);
